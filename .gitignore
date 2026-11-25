@@ -1,2 +1,18 @@
-*.mod*
+# Linux kernel module build outputs
+*.o
+*.ko
+*.mod
+*.mod.c
+.*.cmd
+.*.d
+Module.symvers
+modules.order
+.tmp_versions/
+
+# Compiled userspace examples
+/06-open-release-cdev/cdev_test
+/07-read-write-cdev/test
+a.out
+
+# Local IntelliSense headers
 /.pi-headers/
