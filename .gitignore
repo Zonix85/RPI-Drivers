@@ -16,3 +16,4 @@ a.out
 
 # Local IntelliSense headers
 /.pi-headers/
+/.vscode/compile_commands.json

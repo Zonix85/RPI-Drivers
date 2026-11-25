@@ -8,6 +8,7 @@
         {
             "name": "Raspberry Pi kernel (ARM64)",
             "compilerPath": "",
+            "compileCommands": ["${workspaceFolder}/.vscode/compile_commands.json"],
             "intelliSenseMode": "linux-gcc-arm64",
             "cStandard": "gnu11",
             "defines": ["__KERNEL__", "MODULE", "__aarch64__", "KBUILD_MODNAME=\"driver\""],
