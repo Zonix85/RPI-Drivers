@@ -17,7 +17,7 @@ int main(){
     print("ioctl returned %d\n", status);
     
     status = ioctl(fd, 1234, &c);
-    print("ioctl returned %d\n", status);
+    printf("ioctl returned %d\n", status);
     
     status = ioctl(fd, 987654321, &i);
     print("ioctl returned %d\n", status);
