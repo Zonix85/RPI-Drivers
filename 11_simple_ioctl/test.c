@@ -14,13 +14,13 @@ int main(){
     char c = 123;
     int i = 5678, status;
     status = ioctl(fd, 1, NULL);
-    print("ioctl returned %d\n", status);
+    printf("ioctl returned %d\n", status);
     
     status = ioctl(fd, 1234, &c);
     printf("ioctl returned %d\n", status);
     
     status = ioctl(fd, 987654321, &i);
-    print("ioctl returned %d\n", status);
+    printf("ioctl returned %d\n", status);
     close (fd);
     return 0;
 }
