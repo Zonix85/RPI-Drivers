@@ -38,7 +38,7 @@ static long int my_ioctl(struct file *f, unsigned int cmd , unsigned long args){
 				return status;
 			}
 			for (int i=0; i<s.repeat; i++ ){
-				pr_info("hello_cdev - Hello %s\n", s.name);
+				pr_info("hello_cdev - %d Hello %s\n",i+1, s.name);
 			}
 			break;
 		default:
