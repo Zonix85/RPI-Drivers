@@ -2,18 +2,73 @@
 #include <linux/init.h>
 #include <linux/fs.h>
 #include <linux/cdev.h>
+#include <linux/slab.h>
 
 static dev_t dev_nr;
 static struct cdev my_cdev;
-
 static struct class *my_class;
-static ssize_t my_read (struct file *f,char __user *u, size_t l, loff_t *o){
-	printk("hello_cdev - Read is called\n");
+
+#define MEMSIZE 64
+
+static int my_open (struct inode *inode, struct file *filp){
+	filp->private_data = kmalloc(MEMSIZE, GFP_KERNEL);
+
+	if (!filp->private_data){
+		pr_err("hello_cdev - Could not allocate memory for private data\n");
+		return -ENOMEM;
+	}
 	return 0;
 }
 
+
+static int my_release(struct inode *inode, struct file *filp){
+	kfree(filp->private_data);
+	return 0;
+}
+
+static ssize_t my_read (struct file *filp,char __user *user_buf, size_t len, loff_t *off){
+
+
+	char *text = filp->private_data;
+
+	int not_copied, delta, to_copy = (len + *off)< MEMSIZE ? len : (MEMSIZE- *off);
+	printk("hello_cdev - Read is called, we want to read %ld bytes but actually only copying %d bytes. the offset is %lld\n",len, to_copy , *off);
+
+	if (*off>= sizeof(text)){
+		return 0 ;
+	}
+	not_copied = copy_to_user(user_buf, &text[*off], to_copy);
+	delta = to_copy - not_copied;
+	if (not_copied)
+		pr_warn("hello_cdev - Could only copy %d bytes\n", delta);
+	*off += delta;
+	return delta;
+}
+
+
+static ssize_t my_write (struct file *filp, const char __user *user_buf, size_t len, loff_t *off){
+	char *text = filp->private_data;
+	int not_copied, delta, to_copy = (len + *off)< MEMSIZE ? len : (MEMSIZE - *off);
+        printk("hello_cdev - Write is called, we want to read %ld bytes but actually only copying %d bytes. the offset is %lld\n",len, to_copy , *off);
+
+        if (*off>= sizeof(text)){
+                return 0 ;
+        }
+        not_copied = copy_from_user( &text[*off],user_buf, to_copy);
+        delta = to_copy - not_copied;
+        if (not_copied)
+                pr_warn("hello_cdev - Could only copy %d bytes\n", delta);
+        *off += delta;
+	return delta;
+}
+
+
 static struct file_operations fops = {
-	.read = my_read
+	.open = my_open,
+	.release = my_release,
+	.read = my_read,
+	.write = my_write,
+	.llseek = default_llseek
 };
 
 static int __init my_init(void){
