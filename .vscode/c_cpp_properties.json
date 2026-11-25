@@ -1,0 +1,31 @@
+{
+    "version": 4,
+    "env": {
+        "common": "${workspaceFolder}/.pi-headers/common",
+        "build": "${workspaceFolder}/.pi-headers/build"
+    },
+    "configurations": [
+        {
+            "name": "Raspberry Pi kernel (ARM64)",
+            "compilerPath": "",
+            "intelliSenseMode": "linux-gcc-arm64",
+            "cStandard": "gnu11",
+            "defines": ["__KERNEL__", "MODULE", "__aarch64__", "KBUILD_MODNAME=\"driver\""],
+            "includePath": [
+                "${common}/arch/arm64/include",
+                "${build}/arch/arm64/include/generated",
+                "${common}/include",
+                "${build}/include",
+                "${common}/arch/arm64/include/uapi",
+                "${build}/arch/arm64/include/generated/uapi",
+                "${common}/include/uapi",
+                "${build}/include/generated/uapi"
+            ],
+            "forcedInclude": [
+                "${common}/include/linux/compiler-version.h",
+                "${common}/include/linux/kconfig.h",
+                "${common}/include/linux/compiler_types.h"
+            ]
+        }
+    ]
+}
